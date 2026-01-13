@@ -85,7 +85,7 @@ export class AuthController {
         },
       });
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("LoginPage error:", error);
       return res.status(500).json({
         message: "Server Error",
       });

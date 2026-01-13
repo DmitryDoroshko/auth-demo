@@ -1,0 +1,44 @@
+import { Box, Typography, Avatar, Paper, Stack, Divider, Button } from "@mui/material";
+
+export function ProfilePage() {
+  // Later this will come from API / auth context
+  const user = {
+    name: "John Doe",
+    email: "john@example.com",
+    joined: "January 2026",
+  };
+
+  return (
+    <Box mt={8} width="100%" maxWidth={600}>
+      <Paper elevation={3} sx={{ p: 4 }}>
+        <Stack spacing={3} alignItems="center">
+          <Avatar sx={{ width: 80, height: 80 }}>
+            {user.name[0]}
+          </Avatar>
+
+          <Box textAlign="center">
+            <Typography variant="h5">{user.name}</Typography>
+            <Typography color="text.secondary">{user.email}</Typography>
+          </Box>
+
+          <Divider sx={{ width: "100%" }} />
+
+          <Stack spacing={1} width="100%">
+            <Typography>
+              <strong>Member since:</strong> {user.joined}
+            </Typography>
+          </Stack>
+
+          <Divider sx={{ width: "100%" }} />
+
+          <Stack direction="row" spacing={2}>
+            <Button variant="contained">Edit Profile</Button>
+            <Button variant="outlined" color="error">
+              Logout
+            </Button>
+          </Stack>
+        </Stack>
+      </Paper>
+    </Box>
+  );
+}
