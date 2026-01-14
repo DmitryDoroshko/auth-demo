@@ -1,12 +1,12 @@
-import type { Request, Response, NextFunction } from "express";
+import type { NextFunction, Request, Response } from "express";
 import bcrypt from "bcryptjs";
 
 import type { AuthRequest } from "../middleware/auth.js";
 import { pool } from "../config/database.js";
-import jwt from "jsonwebtoken";
+import { signToken } from "../utils/jwt";
 
 const PASSWORD_SALT_STRENGTH = 10;
-const JWT_SECRET_PLACEHOLDER = "my_jwt_secret_1234";
+const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000;
 
 export class AuthController {
   public static register = async (req: Request, res: Response, next: NextFunction) => {
@@ -31,11 +31,20 @@ export class AuthController {
 
       const result = await pool.query("INSERT INTO users (email, password, name) VALUES ($1, $2, $3) RETURNING id, email, name", [email, hashedPassword, name]);
 
-      const token = jwt.sign({ userId: result.rows[0].id }, process.env.JWT_SECRET || JWT_SECRET_PLACEHOLDER, { expiresIn: "7d" });
+      const token = signToken(result.rows[0].id);
+
+      res.cookie("access_token",
+        token,
+        {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production",
+          sameSite: "strict",
+          maxAge: MAX_COOKIE_AGE,
+        },
+      );
 
       return res.status(201).json({
         message: "User successfully registered",
-        token,
         user: result.rows[0],
       });
 
@@ -69,15 +78,17 @@ export class AuthController {
         });
       }
 
-      const token = jwt.sign({
-          userId: user.id,
-        }, process.env.JWT_SECRET || JWT_SECRET_PLACEHOLDER,
-        { expiresIn: "7d" },
-      );
+      const token = signToken(user.id);
+
+      res.cookie("access_token", token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: MAX_COOKIE_AGE,
+      });
 
       return res.status(200).json({
         message: "User successfully logged in",
-        token,
         user: {
           id: user.id,
           email: user.email,
@@ -90,6 +101,18 @@ export class AuthController {
         message: "Server Error",
       });
     }
+  };
+
+  public static logout = async (req: Request, res: Response, next: NextFunction) => {
+    res.clearCookie("access_token", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+    });
+
+    return res.status(200).json({
+      message: "Logged out",
+    });
   };
 
   public static getProfile = async (req: AuthRequest, res: Response, next: NextFunction) => {

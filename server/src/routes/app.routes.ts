@@ -8,5 +8,6 @@ export default function routes(app: Express) {
   });
   app.post("/api/auth/register", AuthController.register);
   app.post("/api/auth/login", AuthController.login);
+  app.post("/api/auth/logout", AuthController.logout);
   app.get("/api/auth/profile", authMiddleware, AuthController.getProfile);
 };
