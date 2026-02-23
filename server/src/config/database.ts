@@ -4,10 +4,14 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const requiredEnvVars = ["DB_NAME", "DB_USER", "DB_PASSWORD"];
-const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
+const missingEnvVars = requiredEnvVars.filter(
+  (varName) => !process.env[varName]
+);
 
 if (missingEnvVars.length > 0) {
-  throw new Error(`Missing required environment variables: ${missingEnvVars.join(", ")}`);
+  throw new Error(
+    `Missing required environment variables: ${missingEnvVars.join(", ")}`
+  );
 }
 
 export const pool = new Pool({
