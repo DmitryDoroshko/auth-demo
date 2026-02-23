@@ -4,12 +4,13 @@ import type { Request, Response } from "express";
 import { pool } from "../../config/database.js";
 import type { AuthRequest } from "../../middleware/auth.middleware.js";
 import { signToken } from "../../utils/jwt.js";
+import type { LoginBody, RegisterBody } from "./auth.types.js";
 
 const PASSWORD_SALT_STRENGTH = 10;
 const MAX_COOKIE_AGE = 7 * 24 * 60 * 60 * 1000;
 
 export class AuthController {
-  public static register = async (req: TypedRequestBody<{ email: string; password: string; name: string; }>, res: Response) => {
+  public static register = async (req: Request<{}, {}, RegisterBody>, res: Response) => {
     const { email, password, name } = req.body;
 
     try {
@@ -66,7 +67,7 @@ export class AuthController {
     }
   };
 
-  public static login = async (req: Request, res: Response) => {
+  public static login = async (req: Request<{}, {}, LoginBody>, res: Response) => {
     const { email, password } = req.body;
 
     try {
