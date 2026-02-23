@@ -3,8 +3,8 @@ import { AuthAPI } from "../../services/auth/AuthAPI.ts";
 import { AuthContext } from "./AuthContext.tsx";
 
 export interface User {
-  name: string;
   email: string;
+  name: string;
   joined?: string;
 }
 
@@ -26,7 +26,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     email,
     password,
   }: {
-    name: string;
     email: string;
     password: string;
   }) => {

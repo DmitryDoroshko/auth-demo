@@ -4,7 +4,7 @@ import type { User } from "./AuthProvider";
 export interface AuthContext {
   user: User | null;
   logout: () => Promise<void>;
-  login: (data: { email: string; password: string; name: string; }) => Promise<void>;
+  login: (data: { email: string; password: string; }) => Promise<void>;
   loading: boolean;
 }
 
