@@ -17,8 +17,6 @@ export function ProfilePage() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
-  console.log({ user });
-
   useEffect(() => {
     if (!user) {
       navigate(AppRoutes.LOGIN);
@@ -29,6 +27,10 @@ export function ProfilePage() {
     await logout();
     navigate(AppRoutes.LOGIN);
   };
+  
+  if (!user) {
+    return null; // or a loading spinner
+  }
 
   return (
     <Box mt={8} width="100%" maxWidth={600}>
