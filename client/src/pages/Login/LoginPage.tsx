@@ -1,9 +1,18 @@
-import { Container, TextField, Button, Typography, Box, Link } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Link,
+} from "@mui/material";
 import { AppRoutes } from "../../constants/routing.ts";
+import { useAuth } from "../../context/auth/auth-hooks.tsx";
 
 export function LoginPage() {
+  const { login } = useAuth();
   const navigate = useNavigate();
   const [form, setForm] = useState({ email: "", password: "" });
 
@@ -11,11 +20,10 @@ export function LoginPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = () => {
-    console.log(form); // send to API
+  const handleSubmit = async () => {
+    await login({ email: form.email, password: form.password });
   };
 
-  // @ts-ignore
   return (
     <Container maxWidth="xs">
       <Box mt={10}>
@@ -42,13 +50,21 @@ export function LoginPage() {
           margin="normal"
         />
 
-        <Button fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleSubmit}>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 2 }}
+          onClick={handleSubmit}
+        >
           Login
         </Button>
 
         <Typography mt={2} textAlign="center">
           Don’t have an account?{" "}
-          <Link onClick={() => navigate(AppRoutes.SIGN_UP)} sx={{ cursor: "pointer" }}>
+          <Link
+            onClick={() => navigate(AppRoutes.SIGN_UP)}
+            sx={{ cursor: "pointer" }}
+          >
             Sign up
           </Link>
         </Typography>

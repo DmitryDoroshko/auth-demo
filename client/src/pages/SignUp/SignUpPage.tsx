@@ -1,17 +1,26 @@
-import { Container, TextField, Button, Typography, Box, Link } from "@mui/material";
+import {
+  Container,
+  TextField,
+  Button,
+  Typography,
+  Box,
+  Link,
+} from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AppRoutes } from "../../constants/routing.ts";
 
+const initialFormState = {
+  name: "",
+  email: "",
+  password: "",
+  repeatPassword: "",
+};
+
 export function SignUpPage() {
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({
-    name: "",
-    email: "",
-    password: "",
-    repeatPassword: "",
-  });
+  const [form, setForm] = useState(initialFormState);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -32,9 +41,21 @@ export function SignUpPage() {
           Sign Up
         </Typography>
 
-        <TextField fullWidth label="Name" name="name" margin="normal" onChange={handleChange} />
+        <TextField
+          fullWidth
+          label="Name"
+          name="name"
+          margin="normal"
+          onChange={handleChange}
+        />
 
-        <TextField fullWidth label="Email" name="email" margin="normal" onChange={handleChange} />
+        <TextField
+          fullWidth
+          label="Email"
+          name="email"
+          margin="normal"
+          onChange={handleChange}
+        />
 
         <TextField
           fullWidth
@@ -54,13 +75,21 @@ export function SignUpPage() {
           onChange={handleChange}
         />
 
-        <Button fullWidth variant="contained" sx={{ mt: 2 }} onClick={handleSubmit}>
+        <Button
+          fullWidth
+          variant="contained"
+          sx={{ mt: 2 }}
+          onClick={handleSubmit}
+        >
           Create account
         </Button>
 
         <Typography mt={2} textAlign="center">
           Already have an account?{" "}
-          <Link onClick={() => navigate(AppRoutes.LOGIN)} sx={{ cursor: "pointer" }}>
+          <Link
+            onClick={() => navigate(AppRoutes.LOGIN)}
+            sx={{ cursor: "pointer" }}
+          >
             Login
           </Link>
         </Typography>
